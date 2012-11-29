@@ -21,7 +21,7 @@ Rectangle {
     width: 60
     height: parent.height
     x: parent.width - 60
-    color: "#ffffff"
+    color: "green"
     MouseArea {
         id: controlPanelMouseArea
         anchors.fill: parent

@@ -24,10 +24,9 @@ Rectangle {
     state: "START"
     Image {
         id: land
-        height: parent.height
-        width: parent.width - 60
+        width: 340
+        height: 400
         source: 'images/land.png'
-        anchors.centerIn: parent
     }
     ControlPanel {
         Button {
@@ -84,6 +83,7 @@ Rectangle {
 
     function gameInitialze()
     {
+        gameFinishedDelay.stop()
         gameMouseArea.enabled= true
         soldier.visible= true
         soldier.state = "alive"
@@ -95,7 +95,9 @@ Rectangle {
         bulletTimer.stop()
         for (var i=0; i<n2.count; i++) {
             n2.itemAt(i).state = "alive"
-            n2.itemAt(i).visible = true
+        }
+        for (var i=0; i<civilian_repeater.count; i++) {
+            civilian_repeater.itemAt(i).state = "alive"
         }
         gameTimer.start();
         endButton.state = "PLAYING"
@@ -116,7 +118,8 @@ Rectangle {
     }
     function shoot(x, y) {
         console.debug("shoot ",x, y)
-
+        if (gameFinishedDelay.running)
+            return
         // check that the distance is not too far
         var minX = soldier.x - shootRange
         var maxX = soldier.x + shootRange
@@ -133,7 +136,7 @@ Rectangle {
                     n2.itemAt(i).state = "dead";
             }
             for (var i=0; i<mine_repeater.count; i++) {
-                if (check_mine_explode(mine_repeater.itemAt(i),x,y))
+                if ((mine_repeater.itemAt(i).state === "active") && check_mine_explode(mine_repeater.itemAt(i),x,y))
                     mine_repeater.itemAt(i).state = "exploded";
             }
         }
@@ -175,6 +178,18 @@ Rectangle {
     }
 
     Timer {
+        id: gameFinishedDelay
+        interval: 1000; running: false; repeat: false
+        onTriggered: {
+            console.debug("gameFinishedDelay timer triggered")
+            startButton.visible = true
+            startButton.state= "END"
+            gameTimer.stop()
+            gameScene.state="END"
+        }
+    }
+
+    Timer {
         id:bulletTimer
         interval: 50; running: false; repeat: false
         onTriggered: {
@@ -192,8 +207,6 @@ Rectangle {
             sourceSize.height: 20
             sourceSize.width: 20
         }
-        x: 120;
-        y: 120;
     }
 
     MoveDestination {
@@ -207,6 +220,9 @@ Rectangle {
         property bool enemiesDead: false;
         onTriggered: {
             enemiesDead= true
+            if ( gameFinishedDelay.running)
+                return
+
             for (var i=0; i<n2.count; i++) {
                 if ( n2.itemAt(i).state === "alive")
                     enemiesDead=false
@@ -218,25 +234,21 @@ Rectangle {
 
             if (soldier.state === "dead") {
                 console.debug("Lost")
-                startButton.visible = true
                 startButton.txt = "Lost"
-                startButton.state= "END"
                 gameTimer.gameWon = false
-                gameTimer.stop()
-                gameScene.state="END"
+                gameFinishedDelay.start()
                 return
             }
 
             if (enemiesDead) {
-                gameTimer.gameWon = true
-                gameScene.state= "END"
                 startButton.txt = "Won"
-                startButton.visible = true
-                startButton.state = "END"
+                gameTimer.gameWon = true
+                gameFinishedDelay.start()
+                return
             }
             if (gameWon) {
-                gameTimer.stop();
-                gameScene.state= "END"
+//                gameTimer.stop();
+                gameFinishedDelay.start()
                 return
             }
             if ((soldier.destX - soldier.x) > 0) {
@@ -266,17 +278,13 @@ Rectangle {
                         {
                         console.debug("stepped on mine")
                         mine_repeater.itemAt(j).state = "exploded"
-                        startButton.visible = true
                         startButton.txt = "Lost"
-                        startButton.state = "END"
-                        gameTimer.stop();
-                        gameScene.state= "END"
+                        gameFinishedDelay.start()
                         return
                         }
                 }
             }
             for (var j=0; j<n2.count; j++) {
-//                console.debug("move Evil, n2.count=" + n2.count + ", state=" + n2.itemAt(j).state);
                 moveEvil(n2.itemAt(j));
                 // are they able to shoot the soldier?
                 // check that the distance is not too far
@@ -355,6 +363,16 @@ Rectangle {
         }
     }
     Row {
+        id: civilians
+        Repeater {
+            id:civilian_repeater
+            model: 3
+            Civilian {
+
+            }
+        }
+    }
+    Row {
         id: n1
         Repeater {
             id:n2
@@ -365,7 +383,7 @@ Rectangle {
                 y: Math.floor((Math.random()*land.height)%land.height)
                 property int destX: 30
                 property int destY: 30
-                property url enemyImage: "images/red/tackleS.PNG"
+                property url enemyImage: "images/enemy/tackleS.PNG"
                 property bool shooting: false
                 Particles {
                     id: particles
@@ -387,25 +405,25 @@ Rectangle {
                     }
                 function changeImage(dir) {
                     if (dir === "north")
-                        enemyImage3.source = 'images/red/pN.PNG'
+                        enemyImage3.source = 'images/enemy/pN.PNG'
                     else if (dir === "south")
-                        enemyImage3.source = 'images/red/pS.PNG'
+                        enemyImage3.source = 'images/enemy/pS.PNG'
                     else if (dir === "east")
-                        enemyImage3.source = 'images/red/pE.PNG'
+                        enemyImage3.source = 'images/enemy/pE.PNG'
                     else if (dir === "west")
-                        enemyImage3.source = 'images/red/pW.PNG'
+                        enemyImage3.source = 'images/enemy/pW.PNG'
                 }
                 state: "alive"
                 states: [
                     State {
                         name: "alive"
-                        PropertyChanges { target: enemyImage3; source:"images/red/pW.PNG" }
+                        PropertyChanges { target: enemyImage3; source:"images/enemy/pW.PNG" }
                     },
                     State {
                         name: "dead"
                         StateChangeScript { script: particles.burst(4); }
                         PropertyChanges { target: e3; shooting:false }
-                        PropertyChanges { target: enemyImage3; source:'images/red/tackleN.PNG' }
+                        PropertyChanges { target: enemyImage3; source:'images/enemy/pTackled.PNG' }
                     }
                 ]
             }
