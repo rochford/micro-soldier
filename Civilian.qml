@@ -35,7 +35,7 @@ Item {
         source:"images/dead_enemy.png"
     }
     Image {
-        id:civilianImage3
+        id:civilianImage
         source:civilianImage
         sourceSize.height: 20
         sourceSize.width: 20
@@ -44,12 +44,12 @@ Item {
     states: [
         State {
             name: "alive"
-            PropertyChanges { target: civilianImage3; source:"images/civilian/civilian.PNG" }
+            PropertyChanges { target: civilianImage; source:"images/civilian/civilian.PNG" }
         },
         State {
             name: "dead"
             StateChangeScript { script: particles.burst(4); }
-            PropertyChanges { target: civilianImage3; source:'images/civilian/dead.PNG' }
+            PropertyChanges { target: civilianImage; source:'images/civilian/dead.PNG' }
         }
     ]
 }
