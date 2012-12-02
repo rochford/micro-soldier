@@ -21,10 +21,10 @@ Item {
     id: civilian;
     x: Math.floor((Math.random()*land.width)%land.width)
     y: Math.floor((Math.random()*land.height)%land.height)
-    property url civilianImage: "images/civilian/civilian.PNG"
+    property url baseImagePath: "images/civilian/"
+    property url civilianImage: "civilian.PNG"
     Particles {
-        id: particles
-
+        id: civilianParticles
         width: 2; height: 3
         anchors.centerIn: parent
 
@@ -44,12 +44,12 @@ Item {
     states: [
         State {
             name: "alive"
-            PropertyChanges { target: civilianImage; source:"images/civilian/civilian.PNG" }
+            PropertyChanges { target: civilianImage; source:baseImagePath+"civilian.PNG" }
         },
         State {
             name: "dead"
-            StateChangeScript { script: particles.burst(4); }
-            PropertyChanges { target: civilianImage; source:'images/civilian/dead.PNG' }
+            StateChangeScript { script: civilianParticles.burst(4); }
+            PropertyChanges { target: civilianImage; source:baseImagePath+'dead.PNG' }
         }
     ]
 }

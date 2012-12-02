@@ -16,6 +16,7 @@
   */
 import QtQuick 1.1
 import Qt.labs.particles 1.0
+import "GameState.js" as GameState
 
 Rectangle {
     property variant names: [ 'Adam', 'Bob', 'Charlie', 'David', 'Eddy', 'Frank', 'George', 'Harry', 'Ian', 'Jerry', 'Ken' ]
@@ -40,7 +41,6 @@ Rectangle {
             id: endButton
             txt: "Quit"
             color: "lime"
-            //enabled: false
             anchors {
                 bottom: parent.bottom
                 left: parent.left
@@ -87,72 +87,6 @@ Rectangle {
     property string gameOverTextWonLiteral:'Mission Accomplished'
     property int shootRange: 140
 
-    function gameInitialze()
-    {
-        soldierModel.clear()
-        gameFinishedDelay.stop()
-        gameMouseArea.enabled= true
-        gameTimer.gameWon = false
-        moveDestination.visible = false
-        bullet.visible = false
-        bulletTimer.stop()
-        for (var i=0; i<n2.count; i++) {
-            n2.itemAt(i).state = "alive"
-        }
-        for (var i=0; i<civilian_repeater.count; i++) {
-            civilian_repeater.itemAt(i).state = "alive"
-        }
-        for (var i=0; i<soldiers.count; i++) {
-            soldiers.itemAt(i).name = names[i]
-            soldiers.itemAt(i).state = "alive"
-            soldiers.itemAt(i).visible= true
-            soldiers.itemAt(i).x = Math.floor((Math.random()*land.width)%land.width)
-            soldiers.itemAt(i).y = Math.floor((Math.random()*land.height)%land.height)
-            soldierModel.append({"name":names[i], "image":'images/red/pN.pNG' })
-            console.debug('gameInitialize soldier')
-        }
-        gameTimer.start();
-        endButton.state = "PLAYING"
-    }
-
-    function dead(e, x, y) {
-        if (((e.x > (x-10) ) && e.x < (x+10)) && ((e.y > (y-10) ) && e.y < (y+10)))
-            return true;
-        else
-            return false;
-    }
-
-    function check_mine_explode(e, x, y) {
-        if (((e.x > (x-10) ) && e.x < (x+10)) && ((e.y > (y-10) ) && e.y < (y+10)))
-            return true;
-        else
-            return false;
-    }
-    function shoot(x, y) {
-//        console.debug("shoot ",x, y)
-        if (gameFinishedDelay.running)
-            return
-        // check that the distance is not too far
-        var minX = soldiers.itemAt(focusedSolider).x - shootRange
-        var maxX = soldiers.itemAt(focusedSolider).x + shootRange
-        var minY = soldiers.itemAt(focusedSolider).y - shootRange
-        var maxY = soldiers.itemAt(focusedSolider).y + shootRange
-        if ( (minX < x) && (x < maxX)
-                && (minY < y) && (y < maxY) ) {
-            bullet.x = x
-            bullet.y = y
-            bullet.visible = true;
-            bulletTimer.start()
-            for (var i=0; i<n2.count; i++) {
-                if (dead(n2.itemAt(i),x,y))
-                    n2.itemAt(i).state = "dead";
-            }
-            for (var i=0; i<mine_repeater.count; i++) {
-                if ((mine_repeater.itemAt(i).state === "active") && check_mine_explode(mine_repeater.itemAt(i),x,y))
-                    mine_repeater.itemAt(i).state = "exploded";
-            }
-        }
-    }
     focus: true
     Keys.onPressed: {
         if (event.key === Qt.Key_Space) {
@@ -180,7 +114,7 @@ Rectangle {
 
     Timer {
         id:bulletTimer
-        interval: 50; running: false; repeat: false
+        interval: 25; running: false; repeat: false
         onTriggered: {
             console.debug("Bullet timer triggered")
             if (bullet.visible)
@@ -204,7 +138,7 @@ Rectangle {
 
     Timer {
         id:gameTimer
-        interval: 70; running: false; repeat: true
+        interval: 40; running: false; repeat: true
         property bool gameWon: false;
         property bool enemiesDead: false;
         property bool soldiersDead: true
@@ -233,12 +167,20 @@ Rectangle {
                         {
                         console.debug("stepped on mine")
                         mine_repeater.itemAt(j).state = "exploded"
-                        startButton.txt = "Lost"
-                        gameFinishedDelay.start()
                         soldiers.itemAt(focusedSolider).state = "dead"
                         }
                 }
             }
+            for (var j=0; j<civilian_repeater.count; j++) {
+                if (civilian_repeater.itemAt(j).state === "dead") {
+                    console.debug("Lost")
+                    startButton.txt = "Lost"
+                    gameTimer.gameWon = false
+                    gameFinishedDelay.start()
+                    return
+                }
+            }
+
             for (var j=0; j<n2.count; j++) {
                 n2.itemAt(j).moveEvil();
                 // are they able to shoot the soldier?
@@ -297,7 +239,7 @@ Rectangle {
         property int  proxmity: 20
         Repeater {
             id:mine_repeater
-            model: 30
+            model: 60
             Mine {
 
             }
@@ -307,7 +249,7 @@ Rectangle {
         id: civilians
         Repeater {
             id:civilian_repeater
-            model: 3
+            model: 10
             Civilian {
 
             }
@@ -327,7 +269,7 @@ Rectangle {
         id: s1
         Repeater {
             id:soldiers
-            model: 3
+            model: 1
             Soldier {
             }
         }
@@ -339,7 +281,7 @@ Rectangle {
         onStateX: {
             console.debug('onStateX=', statex)
             if (statex === "PLAYING") {
-                gameInitialze();
+                GameState.gameInitialze()
                 gameScene.state = "PLAYING"
             }
             if (statex === "QUIT") {
@@ -357,14 +299,14 @@ Rectangle {
         anchors.fill: land
         onPositionChanged: {
             if ( soldiers.itemAt(focusedSolider).shooting ) {
-                shoot(mouseX, mouseY)
+                GameState.shoot(mouseX, mouseY)
             }
         }
 
         onClicked: {
             if(gameScene.state === "PLAYING") {
                 if ( soldiers.itemAt(focusedSolider).shooting ) {
-                    shoot(mouseX, mouseY)
+                    GameState.shoot(mouseX, mouseY)
                 } else {
                     console.debug("gameMouseArea onClicked")
 

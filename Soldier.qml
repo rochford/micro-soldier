@@ -24,6 +24,7 @@ Item {
     property string name: ""
     property string image: "images/red/pE.PNG"
     Text {
+        id: nameText
         text: name
         font.weight: Font.bold
         font.pointSize: 12
@@ -66,10 +67,12 @@ Item {
         State {
             name: "alive"
             PropertyChanges { target: soldier; image:"images/red/pW.PNG" }
+            PropertyChanges { target: nameText; visible:true }
         },
         State {
             name: "dead"
             PropertyChanges { target: soldier; shooting:false }
+            PropertyChanges { target: nameText; visible:false }
             PropertyChanges { target: soldier; image:'images/red/pTackled.PNG' }
         }
     ]
