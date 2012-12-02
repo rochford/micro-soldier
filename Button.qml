@@ -40,8 +40,11 @@ Rectangle {
             console.log("buttonMouseArea clicked")
             if (txt === "Quit") {
                 button.state = "END"
-                button.visible = false
                 gameMouseArea.stateX("QUIT")
+            }
+            if (txt === "Surrender") {
+                button.state = "END"
+                gameMouseArea.stateX("SURRENDER")
             } else  {
                 button.state = "PLAYING"
                 button.visible = false

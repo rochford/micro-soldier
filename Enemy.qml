@@ -76,46 +76,56 @@ Item {
     ]
 
     function moveEvil(e) {
+        var indx= -1
 //        console.debug("MoveEvil " + e.x +","+ e.y)
         if (e3.state != "alive")
             return;
-        if ((soldiers.itemAt(focusedSolider).x - e3.x) > 0) {
+        for (var i=0; i<soldiers.count; i++) {
+            if (soldiers.itemAt(i).state != "dead") {
+                indx=i
+                break
+            }
+        }
+        if (indx === -1)
+            return;
+
+        if ((soldiers.itemAt(indx).x - e3.x) > 0) {
             e3.x += 1;
             e3.changeImage("east")
         }
-        else if ((soldiers.itemAt(focusedSolider).x - e3.x) < 0 &&
-                 (soldiers.itemAt(focusedSolider).y - e3.y) > 0) {
+        else if ((soldiers.itemAt(indx).x - e3.x) < 0 &&
+                 (soldiers.itemAt(indx).y - e3.y) > 0) {
             e3.x -= 1;
             e3.y += 1
             e3.changeImage("northwest")
         }
-        else if ((soldiers.itemAt(focusedSolider).x - e3.x) < 0 &&
-                 (soldiers.itemAt(focusedSolider).y - e3.y) < 0) {
+        else if ((soldiers.itemAt(indx).x - e3.x) < 0 &&
+                 (soldiers.itemAt(indx).y - e3.y) < 0) {
             e3.x -= 1;
             e3.y -= 1
             e3.changeImage("southwest")
         }
-        else if ((soldiers.itemAt(focusedSolider).x - e3.x) > 0 &&
-                 (soldiers.itemAt(focusedSolider).y - e3.y) > 0) {
+        else if ((soldiers.itemAt(indx).x - e3.x) > 0 &&
+                 (soldiers.itemAt(indx).y - e3.y) > 0) {
             e3.x += 1;
             e3.y += 1
             e3.changeImage("northeast")
         }
-        else if ((soldiers.itemAt(focusedSolider).x - e3.x) < 0 &&
-                 (soldiers.itemAt(focusedSolider).y - e3.y) > 0) {
+        else if ((soldiers.itemAt(indx).x - e3.x) < 0 &&
+                 (soldiers.itemAt(indx).y - e3.y) > 0) {
             e3.x -= 1;
             e3.y += 1
             e3.changeImage("northwest")
         }
-        else if ((soldiers.itemAt(focusedSolider).x - e3.x) < 0) {
+        else if ((soldiers.itemAt(indx).x - e3.x) < 0) {
             e3.x -= 1;
             e3.changeImage("west")
         }
-        if ((soldiers.itemAt(focusedSolider).y - e3.y) > 0) {
+        if ((soldiers.itemAt(indx).y - e3.y) > 0) {
             e3.y += 1;
             e3.changeImage("north")
         }
-        else if ((soldiers.itemAt(focusedSolider).y - e3.y) < 0) {
+        else if ((soldiers.itemAt(indx).y - e3.y) < 0) {
             e3.y -= 1;
             e3.changeImage("south")
         }

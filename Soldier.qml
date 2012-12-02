@@ -22,6 +22,7 @@ Item {
     visible: false
     property string _dir: "east"
     property string name: ""
+    property string image: "images/red/pE.PNG"
     Text {
         text: name
         font.weight: Font.bold
@@ -31,7 +32,7 @@ Item {
 
     Image {
         id:solderImage
-        source:"images/red/pE.PNG"
+        source:image
         sourceSize.height: 20
         sourceSize.width: 20
     }
@@ -43,36 +44,42 @@ Item {
     property bool dead: false
     function changeImage(dir) {
         if (dir === "north" && _dir === dir)
-            solderImage.source = 'images/red/pN.PNG'
+            image = 'images/red/pN.PNG'
         if (dir === "north" && _dir != dir)
-            solderImage.source = 'images/red/pN2.PNG'
+            image = 'images/red/pN2.PNG'
         else if (dir === "south" && _dir === dir )
-            solderImage.source = 'images/red/pS.PNG'
+            image = 'images/red/pS.PNG'
         else if (dir === "south" && _dir != dir )
-            solderImage.source = 'images/red/pS2.PNG'
+            image = 'images/red/pS2.PNG'
         else if (dir === "east" && _dir === dir)
-            solderImage.source = 'images/red/pE.PNG'
+            image = 'images/red/pE.PNG'
         else if (dir === "east" && _dir != dir)
-            solderImage.source = 'images/red/pE2.PNG'
+            image = 'images/red/pE2.PNG'
         else if (dir === "west" && _dir === dir)
-            solderImage.source = 'images/red/pW.PNG'
+            image = 'images/red/pW.PNG'
         else if (dir === "west" && _dir != dir)
-            solderImage.source = 'images/red/pW2.PNG'
+            image = 'images/red/pW2.PNG'
         _dir = dir
     }
     state: "alive"
     states: [
         State {
             name: "alive"
-            PropertyChanges { target: solderImage; source:"images/red/pW.PNG" }
+            PropertyChanges { target: soldier; image:"images/red/pW.PNG" }
         },
         State {
             name: "dead"
             PropertyChanges { target: soldier; shooting:false }
-            PropertyChanges { target: solderImage; source:'images/red/pTackled.PNG' }
+            PropertyChanges { target: soldier; image:'images/red/pTackled.PNG' }
         }
     ]
+    onFocusChanged: {
+        console.debug('onFocusedChanged')
+    }
+
     function moveSoldier() {
+        if (state === "dead")
+            return
         if ((soldier.destX - soldier.x) > 0) {
             soldier.x += 1;
             soldier.changeImage("east")

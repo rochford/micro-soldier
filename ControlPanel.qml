@@ -16,45 +16,47 @@
   */
 import QtQuick 1.1
 
-    Rectangle {
-        id: controlPanel
-        width: 60
-        height: parent.height
-        x: parent.width - 60
-        color: "green"
-        MouseArea {
-            id: controlPanelMouseArea
-            anchors.fill: parent
-            onClicked: {
-                console.debug("controlPanelMouseArea onClicked");
-            }
-        }
-    Column {
-        anchors.bottom: controlPanel.bottom
-        Repeater {
-            id: array
-            model: soldiers.count
-            Item {
-                height: controlPanel.width
-                width: controlPanel.width
-                Image {
-                    id: foo
-                    //                    anchors.bottom: soldiers.bottom
-                    source: "images/red/pS.PNG" //soldiers.itemAt(0).solderImage.source
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
+Rectangle {
+    id: controlPanel
+    width: 60
+    height: parent.height
+    x: parent.width - 60
+    color: "green"
+
+    Component {
+        id: soldierDelegate
+        Column {
+            Image {
+                id: solderImg
+                source: soldiers.itemAt(index).image
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        if (soldiers.itemAt(index).state != "dead") {
+                            //foo.source = soldiers.itemAt(index).solderImage.source
+                            soldierName.text = soldiers.itemAt(index).name
+                            console.debug("", soldiers.itemAt(index).name)
+                            moveDestination.visible = false
                             focusedSolider = index
                             console.debug("focusedSoldier = ", index);
                         }
                     }
                 }
-                Text {
-                    text: names[index]
-                    anchors.top: foo.bottom
-                }
             }
-
+            Text {
+                id: soldierName
+                text: name }
         }
     }
+    ListView {
+        anchors.fill: parent
+        model: soldierModel
+        delegate: soldierDelegate
+    }
+    function updateSoldier(indx) {
+        if (soldiers.itemAt(index).state === "dead") {
+            console.debug("is dead", index);
+        }
+    }
+
 }
