@@ -46,8 +46,8 @@ Rectangle {
             Text {
                 id: soldierName
                 text: name }
+            }
         }
-    }
     ListView {
         anchors.fill: parent
         model: soldierModel

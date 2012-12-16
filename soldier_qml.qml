@@ -138,7 +138,7 @@ Rectangle {
 
     Timer {
         id:gameTimer
-        interval: 40; running: false; repeat: true
+        interval: 80; running: false; repeat: true
         property bool gameWon: false;
         property bool enemiesDead: false;
         property bool soldiersDead: true
@@ -148,6 +148,22 @@ Rectangle {
                 return
 
             for (var i=0; i<n2.count; i++) {
+                for (var j=0; j< mine_repeater.count; j++) {
+                    if ( mine_repeater.itemAt(j).state === "active") {
+                        var minX = mine_repeater.itemAt(j).x - mines.proxmity
+                        var maxX = mine_repeater.itemAt(j).x + mines.proxmity
+                        var minY = mine_repeater.itemAt(j).y - mines.proxmity
+                        var maxY = mine_repeater.itemAt(j).y + mines.proxmity
+                        if ( (minX <  soldiers.itemAt(focusedSolider).x) && (soldiers.itemAt(focusedSolider).x < maxX) &&
+                             (minY <  soldiers.itemAt(focusedSolider).y) && (soldiers.itemAt(focusedSolider).y < maxY) )
+                            {
+                            console.debug("enemy on mine")
+                            mine_repeater.itemAt(j).state = "exploded"
+                            n2.itemAt(i).state = "dead"
+                            }
+                    }
+                }
+
                 if ( n2.itemAt(i).state === "alive")
                     enemiesDead=false
             }
@@ -156,7 +172,7 @@ Rectangle {
                 moveDestination.visible= false
             }
             soldiers.itemAt(focusedSolider).moveSoldier()
-            for (var j=0; i< mine_repeater.count; i++) {
+            for (var j=0; j< mine_repeater.count; j++) {
                 if ( mine_repeater.itemAt(j).state === "active") {
                     var minX = mine_repeater.itemAt(j).x - mines.proxmity
                     var maxX = mine_repeater.itemAt(j).x + mines.proxmity
@@ -183,16 +199,22 @@ Rectangle {
 
             for (var j=0; j<n2.count; j++) {
                 n2.itemAt(j).moveEvil();
+                var indx = -1
                 // are they able to shoot the soldier?
                 // check that the distance is not too far
-                var range = 40
-                var indx = 0
+                var distX = 1000;
+                var distY = 1000;
                 for (var i=0; i<soldiers.count; i++) {
                     if (soldiers.itemAt(i).state != "dead") {
-                        indx=i
-                        break
+                        // if the distance is less, then select thecloser soldier
+                        var deltaX = Math.abs(soldiers.itemAt(i).x - n2.itemAt(j).x);
+                        var deltaY = Math.abs(soldiers.itemAt(i).y - n2.itemAt(j).y);
+                        if ( distX > deltaX && distY > deltaY)
+                            indx=i
                     }
                 }
+
+                var range = 40
                 var minX = soldiers.itemAt(indx).x - range
                 var maxX = soldiers.itemAt(indx).x + range
                 var minY = soldiers.itemAt(indx).y - range
@@ -233,15 +255,13 @@ Rectangle {
         }
     }
 
-
     Row {
         id: mines
         property int  proxmity: 20
         Repeater {
             id:mine_repeater
-            model: 60
+            model: 20
             Mine {
-
             }
         }
     }
@@ -269,7 +289,7 @@ Rectangle {
         id: s1
         Repeater {
             id:soldiers
-            model: 1
+            model: 3
             Soldier {
             }
         }

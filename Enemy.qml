@@ -80,10 +80,15 @@ Item {
 //        console.debug("MoveEvil " + e.x +","+ e.y)
         if (e3.state != "alive")
             return;
+        var distX = 1000;
+        var distY = 1000;
         for (var i=0; i<soldiers.count; i++) {
             if (soldiers.itemAt(i).state != "dead") {
-                indx=i
-                break
+                // if the distance is less, then select the closer soldier
+                var deltaX = Math.abs(soldiers.itemAt(i).x - e3.x);
+                var deltaY = Math.abs(soldiers.itemAt(i).y - e3.y);
+                if ( ( distX > deltaX ) && ( distY > deltaY ) )
+                    indx=i
             }
         }
         if (indx === -1)
