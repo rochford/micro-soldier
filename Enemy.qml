@@ -87,8 +87,11 @@ Item {
                 // if the distance is less, then select the closer soldier
                 var deltaX = Math.abs(soldiers.itemAt(i).x - e3.x);
                 var deltaY = Math.abs(soldiers.itemAt(i).y - e3.y);
-                if ( ( distX > deltaX ) && ( distY > deltaY ) )
+                if ( ( distX > deltaX ) && ( distY > deltaY ) ) {
                     indx=i
+                    distX = deltaX;
+                    distY = deltaY;
+                }
             }
         }
         if (indx === -1)

@@ -209,8 +209,11 @@ Rectangle {
                         // if the distance is less, then select thecloser soldier
                         var deltaX = Math.abs(soldiers.itemAt(i).x - n2.itemAt(j).x);
                         var deltaY = Math.abs(soldiers.itemAt(i).y - n2.itemAt(j).y);
-                        if ( distX > deltaX && distY > deltaY)
+                        if ( ( distX > deltaX ) && ( distY > deltaY ) ) {
                             indx=i
+                            distX = deltaX;
+                            distY = deltaY;
+                        }
                     }
                 }
 
