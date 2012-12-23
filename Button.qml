@@ -20,6 +20,7 @@ Rectangle {
     id: button
     width: 60; height: 55
     enabled: true
+    color: "lime"
 
     property string txt: "value"
     Text{

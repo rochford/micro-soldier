@@ -64,4 +64,5 @@ OTHER_FILES += \
     Enemy.qml \
     ControlPanel.qml \
     Civilian.qml \
-    Button.qml
+    Button.qml \
+    Credits.qml

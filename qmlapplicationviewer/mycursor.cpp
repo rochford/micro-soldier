@@ -28,8 +28,9 @@ MyCursor::MyCursor()
 
 bool MyCursor::cursor(QString str) const
 {
-    if (str == "normal")
+    if (str == "normal") {
         QApplication::setOverrideCursor (QCursor(Qt::PointingHandCursor));
+    }
     else if (str == "target")
         QApplication::setOverrideCursor (QCursor(QPixmap("images/cursor_crosshairs.png")));
     return true;

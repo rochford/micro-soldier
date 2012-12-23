@@ -23,6 +23,7 @@ Rectangle {
     ListModel {
         id: soldierModel
     }
+    focus: true
 
     id:gameScene
     width: 400
@@ -40,7 +41,6 @@ Rectangle {
         Button {
             id: endButton
             txt: "Quit"
-            color: "lime"
             anchors {
                 bottom: parent.bottom
                 left: parent.left
@@ -87,20 +87,34 @@ Rectangle {
     property string gameOverTextWonLiteral:'Mission Accomplished'
     property int shootRange: 140
 
-    focus: true
+    function pressed() {
+        console.debug("pressed")
+        mycursor.cursor("target")
+        event.accepted = true;
+        soldiers.itemAt(focusedSolider).shooting = true;
+
+    }
+    function released()
+    {
+        mycursor.cursor("normal")
+        soldiers.itemAt(focusedSolider).shooting = false;
+    }
+
     Keys.onPressed: {
+        console.debug("soldier pressed")
         if (event.key === Qt.Key_Space) {
-            console.debug(mycursor.cursor("target"))
+            mycursor.cursor("target")
             event.accepted = true;
             soldiers.itemAt(focusedSolider).shooting = true;
        }
     }
     Keys.onReleased: {
         if (event.key === Qt.Key_Space) {
-            console.debug(mycursor.cursor("normal"))
+            mycursor.cursor("normal")
             soldiers.itemAt(focusedSolider).shooting = false;
        }
     }
+
 
     Timer {
         id: gameFinishedDelay
@@ -116,9 +130,8 @@ Rectangle {
 
     Timer {
         id:bulletTimer
-        interval: 25; running: false; repeat: false
+        interval: 250; running: false; repeat: false
         onTriggered: {
-            console.debug("Bullet timer triggered")
             if (bullet.visible)
                 bullet.visible = false;
         }
@@ -322,6 +335,7 @@ Rectangle {
         }
 
         anchors.fill: land
+
         onPositionChanged: {
             if ( soldiers.itemAt(focusedSolider).shooting ) {
                 GameState.shoot(mouseX, mouseY)
@@ -329,6 +343,8 @@ Rectangle {
         }
 
         onClicked: {
+            if (gameMouseArea.pressedButtons & Qt.RightButton)
+                console.debug("Right Button")
             if(gameScene.state === "PLAYING") {
                 if ( soldiers.itemAt(focusedSolider).shooting ) {
                     GameState.shoot(mouseX, mouseY)
@@ -353,7 +369,6 @@ Rectangle {
         id: startButton
         txt: "Press to start"
         width: 120
-        color: "lime"
         anchors.centerIn: parent
         state: "START"
         states: [

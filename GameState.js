@@ -59,6 +59,7 @@ function shoot(x, y) {
 
 function gameInitialze()
 {
+    gameScene.focus = true
     soldierModel.clear()
     gameFinishedDelay.stop()
     gameMouseArea.enabled= true
