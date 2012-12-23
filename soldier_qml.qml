@@ -90,12 +90,14 @@ Rectangle {
     focus: true
     Keys.onPressed: {
         if (event.key === Qt.Key_Space) {
+            console.debug(mycursor.cursor("target"))
             event.accepted = true;
             soldiers.itemAt(focusedSolider).shooting = true;
        }
     }
     Keys.onReleased: {
         if (event.key === Qt.Key_Space) {
+            console.debug(mycursor.cursor("normal"))
             soldiers.itemAt(focusedSolider).shooting = false;
        }
     }
