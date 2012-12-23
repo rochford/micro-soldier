@@ -33,6 +33,12 @@ Rectangle {
         anchors.fill: parent
         onClicked: {
             mainWindow.state="menu"
+            missionList.visible = true
+            menuText.visible = true
+            titleText.visible = true
+            quitButton.visible = true
+            creditButton.visible = true
+
         }
     }
 }

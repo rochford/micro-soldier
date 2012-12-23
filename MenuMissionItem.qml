@@ -4,6 +4,7 @@ Rectangle {
     id: rectangle1
     property string colour: "#aa6666"
     property string missionName: "Mission"
+    property string newState: ""
     width: 100
     height: 100
     color: "#382828"
@@ -11,7 +12,7 @@ Rectangle {
         anchors.fill: parent
         onClicked: {
 //            mainWindow.focus = false
-            mainWindow.state = "play"
+            mainWindow.state = newState
             missionList.visible = false
             menuText.visible = false
             titleText.visible = false

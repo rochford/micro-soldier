@@ -64,17 +64,20 @@ Rectangle {
         anchors.top: menuText.bottom
         MenuMissionItem {
             missionName: "Intro to Hell"
+            newState: "play"
         }
         MenuMissionItem {
             missionName: "Lords of War"
+            newState: "play"
         }
         MenuMissionItem {
             missionName: "Final Finale"
+            newState: "play"
         }
     }
 
     onActiveFocusChanged: {
-        console.debug("menu active focus change")
+        console.debug("menu active focus change =",activeFocus)
     }
 
     Text {
