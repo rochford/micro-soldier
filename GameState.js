@@ -140,10 +140,10 @@ function soldierModelAlive() {
 return total
 }
 
-function updateSoldierModel() {
+function updateSoldierModel(missionCompleted) {
     console.debug("updateSoldierModel()" )
     for (var i= 0; i < missionSoldierModel.count; i++) {
-        if (missionSoldierModel.get(i).alive === true) {
+        if (missionSoldierModel.get(i).alive === true && missionCompleted) {
             missionSoldierModel.get(i).rank += 1
             // now find this soldier in the main model
             for (var j= 0; j < soldierModel.count; j++) {
@@ -171,10 +171,11 @@ function initializeSoldierModel() {
 
     console.debug(names.length)
     soldierModel.clear()
+    missionSoldierModel.clear()
     for (var i= 0; i < names.length; i++) {
         soldierModel.append({"name":names[i],
                              "image":'images/red/pN.pNG',
-                             "rank":0,
+                             "rank":1,
                              "alive": true})
         console.debug("created soldier ",soldierModel.get(i).name)
     }

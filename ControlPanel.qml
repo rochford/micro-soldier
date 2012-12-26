@@ -45,8 +45,17 @@ Rectangle {
             }
             Text {
                 id: soldierName
-                text: name }
+                text: name
             }
+            Image {
+                id:solderRankImg
+                source:"images/ranks/" + soldiers.itemAt(index).rank + ".png"
+                sourceSize.height: 20
+                sourceSize.width: 20
+    //            anchors.top: solderImage.bottom
+            }
+        }
+
         }
     ListView {
         anchors.fill: parent

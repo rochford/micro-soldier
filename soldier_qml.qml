@@ -205,6 +205,7 @@ Rectangle {
                     startButton.txt = "Lost"
                     gameTimer.gameWon = false
                     gameFinishedDelay.start()
+                    GameState.updateSoldierModel(false)
                     return
                 }
             }
@@ -258,14 +259,14 @@ Rectangle {
                 startButton.txt = "Lost"
                 gameTimer.gameWon = false
                 gameFinishedDelay.start()
-                GameState.updateSoldierModel()
+                GameState.updateSoldierModel(false)
             }
 
             if (enemiesDead) {
                 startButton.txt = "Won"
                 gameTimer.gameWon = true
                 gameFinishedDelay.start()
-                GameState.updateSoldierModel()
+                GameState.updateSoldierModel(true)
                 return
             }
             if (gameWon) {

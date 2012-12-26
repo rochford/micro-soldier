@@ -23,7 +23,7 @@ Item {
     property string _dir: "east"
     property string name: ""
     property string image: "images/red/pE.PNG"
-    property int rank: 0
+    property int rank: 1
     Text {
         id: nameText
         text: name
@@ -32,6 +32,13 @@ Item {
         anchors.bottom: solderImage.top
     }
 
+    Image {
+        id:solderRankImage
+        source:"images/ranks/" + rank + ".png"
+        sourceSize.height: 20
+        sourceSize.width: 20
+        anchors.top: solderImage.bottom
+    }
     Image {
         id:solderImage
         source:image

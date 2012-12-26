@@ -209,7 +209,7 @@ Rectangle {
                 console.log("reset clicked")
                 soldierModel.clear()
                 applicationInitialized = false
-                initializeSoldierModel()
+                GameState.initializeSoldierModel()
                 soldiersLeftText.text = "Soldiers Left:" + GameState.soldierModelAlive()
             }
         }
