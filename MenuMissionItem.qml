@@ -7,6 +7,7 @@ Rectangle {
     property string newState: ""
     property int mineCount: 0
     property int enemyCount: 0
+    property int soldierCount: 0
 
     width: 100
     height: 100
@@ -14,16 +15,11 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-//            mainWindow.focus = false
             mainWindow.state = newState
-            missionList.visible = false
-            menuText.visible = false
-            titleText.visible = false
-            quitButton.visible = false
-            creditButton.visible = false
-            helpButton.visible = false
             mainWindow.mineCount = mineCount
             mainWindow.enemyCount = enemyCount
+            mainWindow.soldierCount = soldierCount
+            menuUiVisibile(false)
             console.debug(activeFocus)
         }
     }

@@ -59,10 +59,20 @@ function shoot(x, y) {
     }
 }
 
-function gameInitialze()
+function gameInitialize()
 {
+    // copy the value to the soldierModel
+    for (var i=0; i<mainWindow.soldierCount; i++) {
+        for (var j=0; j<missionSoldierModel.count; j++) {
+            if (missionSoldierModel.get(j).name == soldierModel.get(i).name) {
+                soldierModel.get(i).alive = missionSoldierModel.get(j).alive
+                soldierModel.get(i).rank = missionSoldierModel.get(j).rank
+                console.debug("initalizing soldier ", soldierModel.get(i).name,  missionSoldierModel.get(j).rank)
+            }
+        }
+    }
+    missionSoldierModel.clear()
     gameScene.focus = true
-    soldierModel.clear()
     gameFinishedDelay.stop()
     gameMouseArea.enabled= true
     gameTimer.gameWon = false
@@ -77,23 +87,96 @@ function gameInitialze()
     for (var i=0; i<civilian_repeater.count; i++) {
         civilian_repeater.itemAt(i).state = "alive"
     }
-    for (var i=0; i<soldiers.count; i++) {
-        soldiers.itemAt(i).name = names[i]
-        soldiers.itemAt(i).state = "alive"
-        soldiers.itemAt(i).visible= true
-        soldiers.itemAt(i).x = Math.floor((Math.random()*land.width)%land.width)
-        soldiers.itemAt(i).y = Math.floor((Math.random()*land.height)%land.height)
-        soldierModel.append({"name":names[i], "image":'images/red/pN.pNG' })
-        console.debug('gameInitialize soldier')
+    var soldierCount = 0
+    // TODO: soldiers for each mission should be config item
+    for (var i=0; (i<soldierModel.count) && (soldierCount < mainWindow.soldierCount); i++) {
+        console.debug('gameInitialize soldier', soldiers.itemAt(soldierCount).name)
+        if (soldierModel.get(i).alive === true) {
+            soldiers.itemAt(soldierCount).name = soldierModel.get(i).name
+            soldiers.itemAt(soldierCount).state = "alive"
+            soldiers.itemAt(soldierCount).visible= true
+            soldiers.itemAt(soldierCount).x = Math.floor((Math.random()*land.width)%land.width)
+            soldiers.itemAt(soldierCount).y = Math.floor((Math.random()*land.height)%land.height)
+    //        soldierModel.append({"name":names[i], "image":'images/red/pN.pNG', "rank":0 })
+            missionSoldierModel.append({"name":names[i], "image":'images/red/pN.pNG', "rank":soldierModel.get(i).rank, "alive":true })
+            soldierCount++
+        }
     }
     for (var i=0; i<mineCount; i++) {
         mine_repeater.itemAt(i).state = "active"
         mine_repeater.itemAt(i).visible= true
         mine_repeater.itemAt(i).x = Math.floor((Math.random()*land.width)%land.width)
         mine_repeater.itemAt(i).y = Math.floor((Math.random()*land.height)%land.height)
-        console.debug('gameInitialize mine')
+        //console.debug('gameInitialize mine')
     }
     gameTimer.start();
     endButton.state = "PLAYING"
 }
 
+function onLoaded() {
+    endMissionText = "Honouring\n\n";
+    for (var i= 0; i < missionSoldierModel.count; i++) {
+        if (missionSoldierModel.get(i).alive === false)
+            endMissionText += "R.I.P. ";
+        endMissionText += missionSoldierModel.get(i).name +
+                " Rank: " + missionSoldierModel.get(i).rank;
+        console.debug(missionSoldierModel.get(i).name, missionSoldierModel.get(i).alive)
+        endMissionText += "\n\n"
+    }
+}
+
+function soldierModelAlive() {
+    if ( !mainWindow.applicationInitialized) {
+        // setup the soldierModel
+        initializeSoldierModel()
+    }
+
+    var total = 0
+    for (var i= 0; i < soldierModel.count; i++) {
+        if (soldierModel.get(i).alive === true) {
+            total++
+        }
+    }
+return total
+}
+
+function updateSoldierModel() {
+    console.debug("updateSoldierModel()" )
+    for (var i= 0; i < missionSoldierModel.count; i++) {
+        if (missionSoldierModel.get(i).alive === true) {
+            missionSoldierModel.get(i).rank += 1
+            // now find this soldier in the main model
+            for (var j= 0; j < soldierModel.count; j++) {
+                if (soldierModel.get(j).name === missionSoldierModel.get(i).name) {
+                    soldierModel.get(j).rank = missionSoldierModel.get(i).rank
+                    break
+                }
+            }
+        } else {
+            // now find this soldier in the main model
+            for (var j= 0; j < soldierModel.count; j++) {
+                if (soldierModel.get(j).name === missionSoldierModel.get(i).name) {
+                    soldierModel.get(j).alive = missionSoldierModel.get(i).alive
+                    break
+                }
+            }
+        }
+    }
+}
+
+
+function initializeSoldierModel() {
+    if (mainWindow.applicationInitialized)
+        return
+
+    console.debug(names.length)
+    soldierModel.clear()
+    for (var i= 0; i < names.length; i++) {
+        soldierModel.append({"name":names[i],
+                             "image":'images/red/pN.pNG',
+                             "rank":0,
+                             "alive": true})
+        console.debug("created soldier ",soldierModel.get(i).name)
+    }
+    mainWindow.applicationInitialized = true
+}

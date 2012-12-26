@@ -19,12 +19,9 @@ import Qt.labs.particles 1.0
 import "GameState.js" as GameState
 
 Rectangle {
-    property variant names: [ 'Adam', 'Bob', 'Charlie', 'David', 'Eddy', 'Frank', 'George', 'Harry', 'Ian', 'Jerry', 'Ken' ]
     property int mineCount : mainWindow.mineCount
     property int enemyCount : mainWindow.enemyCount
-    ListModel {
-        id: soldierModel
-    }
+    property int soldierCount : mainWindow.soldierCount
     focus: true
 
     id:gameScene
@@ -35,7 +32,7 @@ Rectangle {
     Image {
         id: land
         width: 340
-        height: 400
+        height: parent.height
         source: 'images/land.png'
     }
     ControlPanel {
@@ -90,7 +87,6 @@ Rectangle {
     property int shootRange: 140
 
     function pressed() {
-        console.debug("pressed")
         mycursor.cursor("target")
         event.accepted = true;
         soldiers.itemAt(focusedSolider).shooting = true;
@@ -103,7 +99,6 @@ Rectangle {
     }
 
     Keys.onPressed: {
-        console.debug("soldier pressed")
         if (event.key === Qt.Key_Space) {
             mycursor.cursor("target")
             event.accepted = true;
@@ -122,7 +117,6 @@ Rectangle {
         id: gameFinishedDelay
         interval: 1000; running: false; repeat: false
         onTriggered: {
-            console.debug("gameFinishedDelay timer triggered")
             startButton.visible = true
             startButton.state= "END"
             gameTimer.stop()
@@ -235,18 +229,21 @@ Rectangle {
                     }
                 }
 
-                var range = 40
-                var minX = soldiers.itemAt(indx).x - range
-                var maxX = soldiers.itemAt(indx).x + range
-                var minY = soldiers.itemAt(indx).y - range
-                var maxY = soldiers.itemAt(indx).y + range
-                if ( (minX < n2.itemAt(j).x) && (n2.itemAt(j).x < maxX)
-                        && (minY < n2.itemAt(j).y) && (n2.itemAt(j).y < maxY) ) {
-                    if ( soldiers.itemAt(indx).state != "dead" ) {
-                        // dead
-                        soldiers.itemAt(indx).state = "dead"
-                    }
+                if (indx != -1) {
+                    var range = 40
+                    var minX = soldiers.itemAt(indx).x - range
+                    var maxX = soldiers.itemAt(indx).x + range
+                    var minY = soldiers.itemAt(indx).y - range
+                    var maxY = soldiers.itemAt(indx).y + range
+                    if ( (minX < n2.itemAt(j).x) && (n2.itemAt(j).x < maxX)
+                            && (minY < n2.itemAt(j).y) && (n2.itemAt(j).y < maxY) ) {
+                        if ( soldiers.itemAt(indx).state != "dead" ) {
+                            // dead
+                            soldiers.itemAt(indx).state = "dead"
+                            missionSoldierModel.get(indx).alive = false
+                        }
 
+                    }
                 }
             }
             soldiersDead= true
@@ -261,12 +258,14 @@ Rectangle {
                 startButton.txt = "Lost"
                 gameTimer.gameWon = false
                 gameFinishedDelay.start()
+                GameState.updateSoldierModel()
             }
 
             if (enemiesDead) {
                 startButton.txt = "Won"
                 gameTimer.gameWon = true
                 gameFinishedDelay.start()
+                GameState.updateSoldierModel()
                 return
             }
             if (gameWon) {
@@ -310,7 +309,7 @@ Rectangle {
         id: s1
         Repeater {
             id:soldiers
-            model: 3
+            model: soldierCount
             Soldier {
             }
         }
@@ -322,7 +321,7 @@ Rectangle {
         onStateX: {
             console.debug('onStateX=', statex)
             if (statex === "PLAYING") {
-                GameState.gameInitialze()
+                GameState.gameInitialize()
                 gameScene.state = "PLAYING"
             }
             if (statex === "QUIT") {

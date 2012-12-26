@@ -1,7 +1,9 @@
 import QtQuick 1.1
+import "GameState.js" as GameState
 
 Rectangle {
     id: mainWindow
+    property bool applicationInitialized: false
     width: 400
     height: 400
     color: "#181616"
@@ -9,12 +11,36 @@ Rectangle {
     focus: true
     property int mineCount: 0
     property int enemyCount: 0
+    property int soldierCount: 0
+    property string endMissionText:
+        "MicroSoldier\n\nCopyright 2013\n\nby Tim Rochford\n\n";
+    property variant names: [ 'Adam', 'Bob', 'Charlie', 'David', 'Eddy', 'Frank', 'George', 'Harry',
+        'Ian', 'Jerry', 'Ken', 'Lee', 'Mike', 'Nick', 'Owen', 'Peter', 'Qi', 'Rob', 'Steve', 'Tom', 'Uwe', 'Vic', 'Wally', 'Xi', 'Yeon', 'Zack' ]
+    ListModel {
+        id: soldierModel
+    }
+    ListModel {
+        id: missionSoldierModel
+    }
+
 
     Loader {
         id: loader
         anchors.fill: parent
         visible: source != ""
         focus: true
+
+    }
+
+
+    onStateChanged: {
+        console.debug("XXX",state)
+        if (state==="play" ) {
+            if ( ! mainWindow.applicationInitialized) {
+                // setup the soldierModel
+                GameState.initializeSoldierModel()
+            }
+        }
     }
 
     states: [
@@ -24,6 +50,12 @@ Rectangle {
                 target: loader
                 source: "Menu.qml"
             }
+
+            PropertyChanges {
+                target: soldiersLeftText
+                text: "Soldiers Left:" + GameState.soldierModelAlive()
+            }
+
         },
         State {
             name: "play"
@@ -31,21 +63,19 @@ Rectangle {
                 target: loader
                 source: "soldier_qml.qml"
             }
-            PropertyChanges {
-                target: gameScene
-                mineCount: mineCount
-            }
-            PropertyChanges {
-                target: gameScene
-                mineCount: enemyCount
-            }
-
         },
         State {
             name: "credits"
             PropertyChanges {
                 target: loader
                 source: "Credits.qml"
+            }
+        },
+        State {
+            name: "endMission"
+            PropertyChanges {
+                target: loader
+                source: "EndMission.qml"
             }
         },
         State {
@@ -81,18 +111,21 @@ Rectangle {
             newState: "play"
             mineCount: 3
             enemyCount: 1
+            soldierCount: 1
         }
         MenuMissionItem {
             missionName: "Lords of War"
             newState: "play"
             mineCount: 5
             enemyCount: 10
+            soldierCount: 2
         }
         MenuMissionItem {
             missionName: "Final Finale"
             newState: "play"
             mineCount: 30
-            enemyCount: 6
+            enemyCount: 1
+            soldierCount: 3
         }
     }
 
@@ -143,12 +176,7 @@ Rectangle {
             onClicked: {
                 console.log("credits clicked")
                 mainWindow.state = "credits"
-                quitButton.visible = false
-                creditButton.visible = false
-                helpButton.visible = false
-                missionList.visible = false
-                menuText.visible = false
-                titleText.visible = false
+                menuUiVisibile(false)
             }
         }
     }
@@ -164,13 +192,50 @@ Rectangle {
             onClicked: {
                 console.log("help clicked")
                 mainWindow.state = "help"
-                quitButton.visible = false
-                creditButton.visible = false
-                helpButton.visible = false
-                missionList.visible = false
-                menuText.visible = false
-                titleText.visible = false
+                menuUiVisibile(false)
             }
         }
+    }
+    Button {
+        id: resetButton
+        x: 125
+        y: 329
+        anchors.right: helpButton.left
+        anchors.rightMargin: 12
+        txt: "Reset"
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                console.log("reset clicked")
+                soldierModel.clear()
+                applicationInitialized = false
+                initializeSoldierModel()
+                soldiersLeftText.text = "Soldiers Left:" + GameState.soldierModelAlive()
+            }
+        }
+    }
+    Text {
+        id: soldiersLeftText
+        y: 348
+        color: "#f9f4f4"
+        text: "" // "Soldiers Left:" + GameState.soldierModelAlive()
+        anchors.right: resetButton.left
+        anchors.rightMargin: 13
+        font.pixelSize: 12
+        onTextChanged: {
+            console.debug("soldiersLeftText changed text=", text)
+        }
+    }
+
+    function menuUiVisibile(visible) {
+        console.debug("menuUIVisble ", visible)
+        quitButton.visible = visible
+        creditButton.visible = visible
+        helpButton.visible = visible
+        missionList.visible = visible
+        menuText.visible = visible
+        titleText.visible = visible
+        soldiersLeftText.visible = visible
+        resetButton.visible = visible
     }
 }

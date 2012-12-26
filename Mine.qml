@@ -20,9 +20,21 @@ import Qt.labs.particles 1.0
 Item {
     id: mine;
     visible: false
-    signal exploded (int x, int y)
+    signal exploded (int explodedX, int explodedY)
     onExploded: {
-        console.debug("Exploded x=", x, ",y=", y)
+        console.debug("Exploded x=", explodedX, ",y=", explodedY)
+        /*
+        var minX = mine.x - mines.proxmity
+        var maxX = mine.x + mines.proxmity
+        var minY = mine.y - mines.proxmity
+        var maxY = mine.y + mines.proxmity
+        if ( (minX <  explodedX) && (explodedX < maxX) &&
+             (minY <  explodedY) && (explodedY < maxY) )
+            {
+            console.debug("mine exploded")
+            exploded(x, y)
+            }
+            */
     }
 
     Particles {

@@ -50,12 +50,13 @@ Rectangle {
         }
     ListView {
         anchors.fill: parent
-        model: soldierModel
+        model: missionSoldierModel
         delegate: soldierDelegate
     }
     function updateSoldier(indx) {
-        if (soldiers.itemAt(index).state === "dead") {
-            console.debug("is dead", index);
+        if (soldiers.itemAt(indx).state === "dead") {
+            missionSoldierModel.get(indx).alive = false
+            console.debug("is dead", indx);
         }
     }
 

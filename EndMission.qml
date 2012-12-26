@@ -1,30 +1,28 @@
 import QtQuick 1.1
 
 Rectangle {
-    id: rectangle1
+    id: endMissionScene
     width: 400
     height: 400
     color: "black"
-    property string creditText:
-        "MicroSoldier\n\nCopyright 2013\n\nby Tim Rochford\n\n";
 
     Timer {
-        id:textScrollTimer
+        id:textScrollTimer2
         interval: 50; running: true; repeat: true
         onTriggered: {
-            text.y -= 4
-            if (text.y < -200) {
-                textScrollTimer.stop()
+            text2.y -= 4
+            if (text2.y < -200) {
+                textScrollTimer2.stop()
                 mainWindow.state="menu"
-                Menu.menuUiVisibile(true)
+                menuUiVisibile(true)
             }
         }
     }
 
     Text {
-        id: text
+        id: text2
         y: parent.height
-        text: creditText
+        text: endMissionText
         color: "#ece1e1"
         anchors.horizontalCenter: parent.horizontalCenter
         horizontalAlignment: Text.AlignHCenter
@@ -34,7 +32,7 @@ Rectangle {
         anchors.fill: parent
         onClicked: {
             mainWindow.state="menu"
-            Menu.menuUiVisibile(true)
+            menuUiVisibile(true)
         }
     }
 }

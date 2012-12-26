@@ -15,6 +15,7 @@
     along with Micro Soldier.  If not, see <http://www.gnu.org/licenses/>.
   */
 import QtQuick 1.1
+import "GameState.js" as GameState
 
 Rectangle {
     id: button
@@ -38,14 +39,20 @@ Rectangle {
         id: buttonMouseArea
         anchors.fill: parent
         onClicked: {
-            console.log("buttonMouseArea clicked")
+            console.log("buttonMouseArea clicked state=",state)
             if (txt === "Quit") {
                 button.state = "END"
                 gameMouseArea.stateX("QUIT")
             }
-            if (txt === "Surrender") {
+            else if (txt === "Surrender") {
                 button.state = "END"
                 gameMouseArea.stateX("SURRENDER")
+            } else if (txt === "Lost" || txt === "Won") {
+                // roll of honour
+                mainWindow.state = "endMission"
+//                menuUiVisibile(false)
+                GameState.onLoaded()
+
             } else  {
                 button.state = "PLAYING"
                 button.visible = false

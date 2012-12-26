@@ -23,6 +23,7 @@ Item {
     property string _dir: "east"
     property string name: ""
     property string image: "images/red/pE.PNG"
+    property int rank: 0
     Text {
         id: nameText
         text: name
@@ -68,18 +69,19 @@ Item {
             name: "alive"
             PropertyChanges { target: soldier; image:"images/red/pW.PNG" }
             PropertyChanges { target: nameText; visible:true }
+            PropertyChanges { target: soldier; dead:false }
         },
         State {
             name: "dead"
             PropertyChanges { target: soldier; shooting:false }
             PropertyChanges { target: nameText; visible:false }
             PropertyChanges { target: soldier; image:'images/red/pTackled.PNG' }
+            PropertyChanges { target: soldier; dead:true }
         }
     ]
     onFocusChanged: {
         console.debug('onFocusedChanged')
     }
-
     function moveSoldier() {
         if (state === "dead")
             return
