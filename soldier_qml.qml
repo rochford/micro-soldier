@@ -20,6 +20,8 @@ import "GameState.js" as GameState
 
 Rectangle {
     property variant names: [ 'Adam', 'Bob', 'Charlie', 'David', 'Eddy', 'Frank', 'George', 'Harry', 'Ian', 'Jerry', 'Ken' ]
+    property int mineCount : mainWindow.mineCount
+    property int enemyCount : mainWindow.enemyCount
     ListModel {
         id: soldierModel
     }
@@ -198,6 +200,7 @@ Rectangle {
                         {
                         console.debug("stepped on mine")
                         mine_repeater.itemAt(j).state = "exploded"
+                        mine_repeater.itemAt(j).exploded( mine_repeater.itemAt(j).x,  mine_repeater.itemAt(j).y)
                         soldiers.itemAt(focusedSolider).state = "dead"
                         }
                 }
@@ -278,7 +281,7 @@ Rectangle {
         property int  proxmity: 20
         Repeater {
             id:mine_repeater
-            model: 20
+            model: mineCount
             Mine {
             }
         }
@@ -297,7 +300,7 @@ Rectangle {
         id: n1
         Repeater {
             id:n2
-            model: 2
+            model: enemyCount
             Enemy {
             }
         }

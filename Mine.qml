@@ -19,7 +19,12 @@ import Qt.labs.particles 1.0
 
 Item {
     id: mine;
-    visible: true
+    visible: false
+    signal exploded (int x, int y)
+    onExploded: {
+        console.debug("Exploded x=", x, ",y=", y)
+    }
+
     Particles {
         id: mineParticles
 

@@ -16,6 +16,12 @@ Rectangle {
             if (text.y < -200) {
                 textScrollTimer.stop()
                 mainWindow.state="menu"
+                missionList.visible = true
+                menuText.visible = true
+                titleText.visible = true
+                quitButton.visible = true
+                creditButton.visible = true
+                helpButton.visible = true
             }
         }
     }
@@ -38,7 +44,7 @@ Rectangle {
             titleText.visible = true
             quitButton.visible = true
             creditButton.visible = true
-
+            helpButton.visible = true
         }
     }
 }

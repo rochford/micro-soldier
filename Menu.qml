@@ -7,6 +7,9 @@ Rectangle {
     color: "#181616"
     border.color: "#000000"
     focus: true
+    property int mineCount: 0
+    property int enemyCount: 0
+
     Loader {
         id: loader
         anchors.fill: parent
@@ -28,17 +31,28 @@ Rectangle {
                 target: loader
                 source: "soldier_qml.qml"
             }
-/*            PropertyChanges {
-                target: loader
-                focus: false
+            PropertyChanges {
+                target: gameScene
+                mineCount: mineCount
             }
-            */
+            PropertyChanges {
+                target: gameScene
+                mineCount: enemyCount
+            }
+
         },
         State {
             name: "credits"
             PropertyChanges {
                 target: loader
                 source: "Credits.qml"
+            }
+        },
+        State {
+            name: "help"
+            PropertyChanges {
+                target: loader
+                source: "Help.qml"
             }
         }
     ]
@@ -63,16 +77,22 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: menuText.bottom
         MenuMissionItem {
-            missionName: "Intro to Hell"
+            missionName: "Into Hell"
             newState: "play"
+            mineCount: 3
+            enemyCount: 1
         }
         MenuMissionItem {
             missionName: "Lords of War"
             newState: "play"
+            mineCount: 5
+            enemyCount: 10
         }
         MenuMissionItem {
             missionName: "Final Finale"
             newState: "play"
+            mineCount: 30
+            enemyCount: 6
         }
     }
 
@@ -125,6 +145,28 @@ Rectangle {
                 mainWindow.state = "credits"
                 quitButton.visible = false
                 creditButton.visible = false
+                helpButton.visible = false
+                missionList.visible = false
+                menuText.visible = false
+                titleText.visible = false
+            }
+        }
+    }
+    Button {
+        id: helpButton
+        x: 197
+        y: 329
+        anchors.right: creditButton.left
+        anchors.rightMargin: 13
+        txt: "Help"
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                console.log("help clicked")
+                mainWindow.state = "help"
+                quitButton.visible = false
+                creditButton.visible = false
+                helpButton.visible = false
                 missionList.visible = false
                 menuText.visible = false
                 titleText.visible = false

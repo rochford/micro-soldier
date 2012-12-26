@@ -5,6 +5,9 @@ Rectangle {
     property string colour: "#aa6666"
     property string missionName: "Mission"
     property string newState: ""
+    property int mineCount: 0
+    property int enemyCount: 0
+
     width: 100
     height: 100
     color: "#382828"
@@ -18,6 +21,9 @@ Rectangle {
             titleText.visible = false
             quitButton.visible = false
             creditButton.visible = false
+            helpButton.visible = false
+            mainWindow.mineCount = mineCount
+            mainWindow.enemyCount = enemyCount
             console.debug(activeFocus)
         }
     }

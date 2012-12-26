@@ -51,8 +51,10 @@ function shoot(x, y) {
                 civilian_repeater.itemAt(i).state = "dead";
         }
         for (var i=0; i<mine_repeater.count; i++) {
-            if ((mine_repeater.itemAt(i).state === "active") && GameState.check_mine_explode(mine_repeater.itemAt(i),x,y))
+            if ((mine_repeater.itemAt(i).state === "active") && GameState.check_mine_explode(mine_repeater.itemAt(i),x,y)) {
                 mine_repeater.itemAt(i).state = "exploded";
+                mine_repeater.itemAt(i).exploded(mine_repeater.itemAt(i).x, mine_repeater.itemAt(i).y);
+            }
         }
     }
 }
@@ -69,6 +71,8 @@ function gameInitialze()
     bulletTimer.stop()
     for (var i=0; i<n2.count; i++) {
         n2.itemAt(i).state = "alive"
+        n2.itemAt(i).x = Math.floor((Math.random()*land.width)%land.width)
+        n2.itemAt(i).y = Math.floor((Math.random()*land.height)%land.height)
     }
     for (var i=0; i<civilian_repeater.count; i++) {
         civilian_repeater.itemAt(i).state = "alive"
@@ -81,6 +85,13 @@ function gameInitialze()
         soldiers.itemAt(i).y = Math.floor((Math.random()*land.height)%land.height)
         soldierModel.append({"name":names[i], "image":'images/red/pN.pNG' })
         console.debug('gameInitialize soldier')
+    }
+    for (var i=0; i<mineCount; i++) {
+        mine_repeater.itemAt(i).state = "active"
+        mine_repeater.itemAt(i).visible= true
+        mine_repeater.itemAt(i).x = Math.floor((Math.random()*land.width)%land.width)
+        mine_repeater.itemAt(i).y = Math.floor((Math.random()*land.height)%land.height)
+        console.debug('gameInitialize mine')
     }
     gameTimer.start();
     endButton.state = "PLAYING"
