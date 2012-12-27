@@ -1,12 +1,12 @@
 /*
     This file is part of Micro Soldier.
 
-    Foobar is free software: you can redistribute it and/or modify
+    Micro Solider is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Foobar is distributed in the hope that it will be useful,
+    Micro Solider is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -22,7 +22,7 @@ Item {
     x: Math.floor((Math.random()*land.width)%land.width)
     y: Math.floor((Math.random()*land.height)%land.height)
     property url baseImagePath: "images/civilian/"
-    property url civilianImage: "civilian.PNG"
+    property url civilianImagex: "civilian.PNG"
     Particles {
         id: civilianParticles
         width: 2; height: 3
@@ -36,9 +36,9 @@ Item {
     }
     Image {
         id:civilianImage
-        source:civilianImage
-        sourceSize.height: 20
-        sourceSize.width: 20
+        source:baseImagePath+"civilian.PNG"
+        sourceSize.height: 24
+        sourceSize.width: 24
         }
     state: "alive"
     states: [

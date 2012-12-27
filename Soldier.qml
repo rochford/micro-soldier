@@ -1,12 +1,12 @@
 /*
     This file is part of Micro Soldier.
 
-    Foobar is free software: you can redistribute it and/or modify
+    Micro Solider is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Foobar is distributed in the hope that it will be useful,
+    Micro Solider is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -27,7 +27,6 @@ Item {
     Text {
         id: nameText
         text: name
-        font.weight: Font.bold
         font.pointSize: 12
         anchors.bottom: solderImage.top
     }
@@ -42,8 +41,8 @@ Item {
     Image {
         id:solderImage
         source:image
-        sourceSize.height: 20
-        sourceSize.width: 20
+        sourceSize.height: 24
+        sourceSize.width: 24
     }
     x: 30;
     y: 30;

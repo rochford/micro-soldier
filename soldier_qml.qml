@@ -1,12 +1,12 @@
 /*
     This file is part of Micro Soldier.
 
-    Foobar is free software: you can redistribute it and/or modify
+    Micro Solider is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Foobar is distributed in the hope that it will be useful,
+    Micro Solider is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -39,24 +39,10 @@ Rectangle {
         id: controlPanel
         Button {
             id: endButton
-            txt: "Quit"
+            txt: "Surrender"
             anchors {
                 bottom: parent.bottom
                 left: parent.left
-            }
-            state: "START"
-            states: [
-                State {
-                    name: "START"
-                    PropertyChanges { target: endButton; txt:"Quit"}
-                },
-                State {
-                    name: "PLAYING"
-                    PropertyChanges { target: endButton; txt:"Surrender"}
-                }
-            ]
-            onStateChanged: {
-                console.debug( "endButton("+ txt + ")" + state )
             }
         }
     }
@@ -65,20 +51,17 @@ Rectangle {
         State {
             name: "START"
             PropertyChanges { target: startButton; visible: true}
-            PropertyChanges { target: endButton; txt:"Quit"}
             PropertyChanges { target: gameScene; color:"red"}
         },
         State {
             name: "PLAYING"
             PropertyChanges { target: startButton; visible: false}
-            PropertyChanges { target: endButton; txt:"Surrender"}
             PropertyChanges { target: gameScene; color:"green"}
             PropertyChanges { target: gameScene; color:"lime"}
         },
         State {
             name: "END"
             PropertyChanges { target: startButton; visible: true}
-            PropertyChanges { target: endButton; txt:"Quit"}
             PropertyChanges { target: gameScene; color:"blue"}
         }
     ]

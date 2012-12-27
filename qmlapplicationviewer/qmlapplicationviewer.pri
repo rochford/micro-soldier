@@ -6,6 +6,7 @@
 # may offer an updated version of it.
 
 QT += declarative
+QT -= networking
 
 SOURCES += $$PWD/qmlapplicationviewer.cpp
 SOURCES += $$PWD/mycursor.cpp
