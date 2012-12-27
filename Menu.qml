@@ -39,18 +39,14 @@ Rectangle {
         id: missionSoldierModel
     }
 
-
     Loader {
         id: loader
         anchors.fill: parent
         visible: source != ""
         focus: true
-
     }
 
-
     onStateChanged: {
-        console.debug("XXX",state)
         if (state==="play" ) {
             if ( ! mainWindow.applicationInitialized) {
                 // setup the soldierModel
@@ -109,59 +105,64 @@ Rectangle {
     Text {
         id: menuText
         x: 140
-        y: 166
+        width: 260
+        height: 45
         color: "#ece1e1"
         text: qsTr("Select Your Mission")
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: titleText.bottom
+        anchors.topMargin: 5
+        anchors.horizontalCenter: titleText.horizontalCenter
         horizontalAlignment: Text.AlignHCenter
         font.bold: true
         wrapMode: Text.WordWrap
-        font.pixelSize: 26
+        font.pixelSize: 20
     }
-    Row {
+
+    Flow {
         id: missionList
+        width: 400
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: menuText.bottom
         MenuMissionItem {
             missionName: "Into Hell"
-            newState: "play"
             mineCount: 3
-            enemyCount: 1
+            enemyCount: 2
             soldierCount: 1
         }
         MenuMissionItem {
-            missionName: "Lords of War"
-            newState: "play"
+            missionName: "Against All Odds"
             mineCount: 5
-            enemyCount: 10
+            enemyCount: 4
             soldierCount: 2
         }
         MenuMissionItem {
-            missionName: "Final Finale"
-            newState: "play"
-            mineCount: 30
-            enemyCount: 1
+            missionName: "Minefield Attack"
+            mineCount: 54
+            enemyCount: 2
             soldierCount: 3
         }
-    }
-
-    onActiveFocusChanged: {
-        console.debug("menu active focus change =",activeFocus)
+        MenuMissionItem {
+            missionName: "Final Push"
+            mineCount: 30
+            enemyCount: 3
+            soldierCount: 2
+        }
     }
 
     Text {
         id: titleText
         x: 149
-        y: 86
+        width: 244
+        height: 69
         color: "#fdf4f4"
         text: qsTr("microSolider")
+        anchors.top: parent.top
+        anchors.topMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
         font.bold: true
         styleColor: "#f9f4f4"
         horizontalAlignment: Text.AlignHCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 300
-        font.pixelSize: 39
+        font.pixelSize: 30
     }
 
     Button {
@@ -196,6 +197,7 @@ Rectangle {
             }
         }
     }
+
     Button {
         id: helpButton
         x: 197
@@ -212,6 +214,7 @@ Rectangle {
             }
         }
     }
+
     Button {
         id: resetButton
         x: 125
@@ -230,6 +233,7 @@ Rectangle {
             }
         }
     }
+
     Text {
         id: soldiersLeftText
         y: 348

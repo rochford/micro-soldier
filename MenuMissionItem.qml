@@ -17,10 +17,10 @@
 import QtQuick 1.1
 
 Rectangle {
-    id: rectangle1
+    id: missionItemRect
     property string colour: "#aa6666"
     property string missionName: "Mission"
-    property string newState: ""
+    property string newState: "play"
     property int mineCount: 0
     property int enemyCount: 0
     property int soldierCount: 0
@@ -42,11 +42,11 @@ Rectangle {
     Image {
         id: image1
         anchors.top: parent.top
-        anchors.topMargin: 10
+        anchors.topMargin: 2
         anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
-        sourceSize.height: 50
-        sourceSize.width: 50
+        sourceSize.height: 40
+        sourceSize.width: 40
         source: "images/land.png"
 
     }
@@ -57,6 +57,7 @@ Rectangle {
         wrapMode: Text.WordWrap
         font.bold: true
         font.pointSize: 9
+        width: missionItemRect - 5
         styleColor: "#f3ecec"
         horizontalAlignment: Text.AlignHCenter
         anchors.top: image1.bottom

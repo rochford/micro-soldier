@@ -28,10 +28,7 @@ Rectangle {
         id: buttonLabel
         anchors.centerIn: parent
         text: txt
-        font.pointSize: 12
-    }
-    onVisibleChanged: {
-        console.debug("button: onVisibleChanged txt:" + txt)
+        font.pointSize: 10
     }
 
     MouseArea {
@@ -49,7 +46,6 @@ Rectangle {
             } else if (txt === "Lost" || txt === "Won") {
                 // roll of honour
                 mainWindow.state = "endMission"
-//                menuUiVisibile(false)
                 GameState.onLoaded()
 
             } else  {

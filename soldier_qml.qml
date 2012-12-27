@@ -51,22 +51,16 @@ Rectangle {
         State {
             name: "START"
             PropertyChanges { target: startButton; visible: true}
-            PropertyChanges { target: gameScene; color:"red"}
         },
         State {
             name: "PLAYING"
             PropertyChanges { target: startButton; visible: false}
-            PropertyChanges { target: gameScene; color:"green"}
-            PropertyChanges { target: gameScene; color:"lime"}
         },
         State {
             name: "END"
             PropertyChanges { target: startButton; visible: true}
-            PropertyChanges { target: gameScene; color:"blue"}
         }
     ]
-    property string gameOverTextLiteral:'Mission Failed'
-    property string gameOverTextWonLiteral:'Mission Accomplished'
     property int shootRange: 140
 
     function pressed() {
@@ -86,15 +80,14 @@ Rectangle {
             mycursor.cursor("target")
             event.accepted = true;
             soldiers.itemAt(focusedSolider).shooting = true;
-       }
+        }
     }
     Keys.onReleased: {
         if (event.key === Qt.Key_Space) {
             mycursor.cursor("normal")
             soldiers.itemAt(focusedSolider).shooting = false;
-       }
+        }
     }
-
 
     Timer {
         id: gameFinishedDelay
@@ -149,12 +142,12 @@ Rectangle {
                         var minY = mine_repeater.itemAt(j).y - mines.proxmity
                         var maxY = mine_repeater.itemAt(j).y + mines.proxmity
                         if ( (minX <  soldiers.itemAt(focusedSolider).x) && (soldiers.itemAt(focusedSolider).x < maxX) &&
-                             (minY <  soldiers.itemAt(focusedSolider).y) && (soldiers.itemAt(focusedSolider).y < maxY) )
-                            {
+                                (minY <  soldiers.itemAt(focusedSolider).y) && (soldiers.itemAt(focusedSolider).y < maxY) )
+                        {
                             console.debug("enemy on mine")
                             mine_repeater.itemAt(j).state = "exploded"
                             n2.itemAt(i).state = "dead"
-                            }
+                        }
                     }
                 }
 
@@ -162,7 +155,7 @@ Rectangle {
                     enemiesDead=false
             }
             if (soldiers.itemAt(focusedSolider).x === moveDestination.x &&
-                soldiers.itemAt(focusedSolider).y === moveDestination.y) {
+                    soldiers.itemAt(focusedSolider).y === moveDestination.y) {
                 moveDestination.visible= false
             }
             soldiers.itemAt(focusedSolider).moveSoldier()
@@ -173,13 +166,13 @@ Rectangle {
                     var minY = mine_repeater.itemAt(j).y - mines.proxmity
                     var maxY = mine_repeater.itemAt(j).y + mines.proxmity
                     if ( (minX <  soldiers.itemAt(focusedSolider).x) && (soldiers.itemAt(focusedSolider).x < maxX) &&
-                         (minY <  soldiers.itemAt(focusedSolider).y) && (soldiers.itemAt(focusedSolider).y < maxY) )
-                        {
+                            (minY <  soldiers.itemAt(focusedSolider).y) && (soldiers.itemAt(focusedSolider).y < maxY) )
+                    {
                         console.debug("stepped on mine")
                         mine_repeater.itemAt(j).state = "exploded"
                         mine_repeater.itemAt(j).exploded( mine_repeater.itemAt(j).x,  mine_repeater.itemAt(j).y)
                         soldiers.itemAt(focusedSolider).state = "dead"
-                        }
+                    }
                 }
             }
             for (var j=0; j<civilian_repeater.count; j++) {

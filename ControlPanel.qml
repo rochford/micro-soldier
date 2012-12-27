@@ -20,7 +20,7 @@ Rectangle {
     id: controlPanel
     width: 60
     height: parent.height
-    x: parent.width - 60
+    x: parent.width - controlPanel.width
     color: "green"
 
     Component {
@@ -45,28 +45,19 @@ Rectangle {
             }
             Text {
                 id: soldierName
-                text: name
+                text: soldiers.itemAt(index).name
             }
             Image {
                 id:solderRankImg
                 source:"images/ranks/" + soldiers.itemAt(index).rank + ".png"
                 sourceSize.height: 20
                 sourceSize.width: 20
-    //            anchors.top: solderImage.bottom
             }
         }
-
-        }
+    }
     ListView {
         anchors.fill: parent
         model: missionSoldierModel
         delegate: soldierDelegate
     }
-    function updateSoldier(indx) {
-        if (soldiers.itemAt(indx).state === "dead") {
-            missionSoldierModel.get(indx).alive = false
-            console.debug("is dead", indx);
-        }
-    }
-
 }

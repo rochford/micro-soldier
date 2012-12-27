@@ -64,7 +64,7 @@ function gameInitialize()
     // copy the value to the soldierModel
     for (var i=0; i<mainWindow.soldierCount; i++) {
         for (var j=0; j<missionSoldierModel.count; j++) {
-            if (missionSoldierModel.get(j).name == soldierModel.get(i).name) {
+            if (missionSoldierModel.get(j).name === soldierModel.get(i).name) {
                 soldierModel.get(i).alive = missionSoldierModel.get(j).alive
                 soldierModel.get(i).rank = missionSoldierModel.get(j).rank
                 console.debug("initalizing soldier ", soldierModel.get(i).name,  missionSoldierModel.get(j).rank)
@@ -137,7 +137,7 @@ function soldierModelAlive() {
             total++
         }
     }
-return total
+    return total
 }
 
 function updateSoldierModel(missionCompleted) {
@@ -145,6 +145,7 @@ function updateSoldierModel(missionCompleted) {
     for (var i= 0; i < missionSoldierModel.count; i++) {
         if (missionSoldierModel.get(i).alive === true && missionCompleted) {
             missionSoldierModel.get(i).rank += 1
+            missionSoldierModel.get(i).rank = Math.min(10,missionSoldierModel.get(i).rank)
             // now find this soldier in the main model
             for (var j= 0; j < soldierModel.count; j++) {
                 if (soldierModel.get(j).name === missionSoldierModel.get(i).name) {
