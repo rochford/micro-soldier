@@ -32,10 +32,10 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        if (soldiers.itemAt(index).state != "dead") {
+                        if (missionSoldierModel.get(index).state != "dead") {
                             //foo.source = soldiers.itemAt(index).solderImage.source
-                            soldierName.text = soldiers.itemAt(index).name
-                            console.debug("", soldiers.itemAt(index).name)
+                            soldierName.text = missionSoldierModel.get(index).name
+                            console.debug("", missionSoldierModel.get(index).name)
                             moveDestination.visible = false
                             focusedSolider = index
                             console.debug("focusedSoldier = ", index);
@@ -45,11 +45,11 @@ Rectangle {
             }
             Text {
                 id: soldierName
-                text: soldiers.itemAt(index).name
+                text: missionSoldierModel.get(index).name
             }
             Image {
                 id:solderRankImg
-                source:"images/ranks/" + soldiers.itemAt(index).rank + ".png"
+                source:"images/ranks/" + missionSoldierModel.get(index).rank + ".png"
                 sourceSize.height: 20
                 sourceSize.width: 20
             }

@@ -67,6 +67,7 @@ function gameInitialize()
             if (missionSoldierModel.get(j).name === soldierModel.get(i).name) {
                 soldierModel.get(i).alive = missionSoldierModel.get(j).alive
                 soldierModel.get(i).rank = missionSoldierModel.get(j).rank
+                soldiers.itemAt(j).rank = missionSoldierModel.get(j).rank
                 console.debug("initalizing soldier ", soldierModel.get(i).name,  missionSoldierModel.get(j).rank)
             }
         }
@@ -95,6 +96,7 @@ function gameInitialize()
             soldiers.itemAt(soldierCount).name = soldierModel.get(i).name
             soldiers.itemAt(soldierCount).state = "alive"
             soldiers.itemAt(soldierCount).visible= true
+            soldiers.itemAt(soldierCount).rank = soldierModel.get(i).rank
             soldiers.itemAt(soldierCount).x = Math.floor((Math.random()*land.width)%land.width)
             soldiers.itemAt(soldierCount).y = Math.floor((Math.random()*land.height)%land.height)
     //        soldierModel.append({"name":names[i], "image":'images/red/pN.pNG', "rank":0 })
