@@ -23,7 +23,7 @@ Item {
     y: Math.floor((Math.random()*land.height)%land.height)
     property int destX: 30
     property int destY: 30
-    property string image: "images/enemy/pN.PNG"
+    property string enemyImage: "images/enemy/pN.PNG"
     property bool shooting: false
     Particles {
         id: particles
@@ -40,28 +40,18 @@ Item {
     Sprite {
         id:enemyImage3
         width: 30;height: 30
-        source: image
+        source: e3.enemyImage
         running: false
         frameCount: 3
     }
-/*
-    Image {
-        id:enemyImage3
-        source:enemyImage
-        sourceSize.height: 24
-        sourceSize.width: 24
-        }
-        */
     function changeImage(dir) {
         enemyImage3.running = true
-        image = "images/enemy/"+ dir + ".png"
-        console.debug("changeImage ", image)
+        enemyImage = "images/enemy/"+ dir + ".png"
     }
     state: "alive"
     states: [
         State {
             name: "alive"
-            PropertyChanges { target: enemyImage3; source:"images/enemy/pW.PNG" }
         },
         State {
             name: "dead"
@@ -104,25 +94,25 @@ Item {
                  (soldiers.itemAt(indx).y - e3.y) > 0) {
             e3.x -= 1;
             e3.y += 1
-            e3.changeImage("northwest")
+            e3.changeImage("southwest")
         }
         else if ((soldiers.itemAt(indx).x - e3.x) < 0 &&
                  (soldiers.itemAt(indx).y - e3.y) < 0) {
             e3.x -= 1;
             e3.y -= 1
-            e3.changeImage("southwest")
+            e3.changeImage("northwest")
         }
         else if ((soldiers.itemAt(indx).x - e3.x) > 0 &&
                  (soldiers.itemAt(indx).y - e3.y) > 0) {
             e3.x += 1;
             e3.y += 1
-            e3.changeImage("northeast")
+            e3.changeImage("southeast")
         }
         else if ((soldiers.itemAt(indx).x - e3.x) < 0 &&
                  (soldiers.itemAt(indx).y - e3.y) > 0) {
             e3.x -= 1;
             e3.y += 1
-            e3.changeImage("northwest")
+            e3.changeImage("southwest")
         }
         else if ((soldiers.itemAt(indx).x - e3.x) < 0) {
             e3.x -= 1;
@@ -130,11 +120,11 @@ Item {
         }
         if ((soldiers.itemAt(indx).y - e3.y) > 0) {
             e3.y += 1;
-            e3.changeImage("north")
+            e3.changeImage("south")
         }
         else if ((soldiers.itemAt(indx).y - e3.y) < 0) {
             e3.y -= 1;
-            e3.changeImage("south")
+            e3.changeImage("north")
         }
     }
 

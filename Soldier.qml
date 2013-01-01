@@ -114,11 +114,11 @@ Item {
         }
         if (soldier.destY - soldier.y > 0) {
             soldier.y += 1;
-            soldier.changeImage("north")
+            soldier.changeImage("south")
         }
         else if (soldier.destY - soldier.y < 0) {
             soldier.y -= 1;
-            soldier.changeImage("south")
+            soldier.changeImage("north")
         }
     }
 }
