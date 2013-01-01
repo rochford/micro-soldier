@@ -29,6 +29,11 @@ Rectangle {
             Image {
                 id: solderImg
                 source: soldiers.itemAt(index).image
+                // make sure only first sprite image is displayed.
+                clip: true
+                fillMode: Image.PreserveAspectCrop
+                width:  30
+
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {

@@ -23,7 +23,7 @@ Item {
     y: Math.floor((Math.random()*land.height)%land.height)
     property int destX: 30
     property int destY: 30
-    property url enemyImage: "images/enemy/tackleS.PNG"
+    property string image: "images/enemy/pN.PNG"
     property bool shooting: false
     Particles {
         id: particles
@@ -37,29 +37,25 @@ Item {
         velocity: 20; velocityDeviation: 10
         source:"images/dead_enemy.png"
     }
+    Sprite {
+        id:enemyImage3
+        width: 30;height: 30
+        source: image
+        running: false
+        frameCount: 3
+    }
+/*
     Image {
         id:enemyImage3
         source:enemyImage
         sourceSize.height: 24
         sourceSize.width: 24
         }
+        */
     function changeImage(dir) {
-        if (dir === "north")
-            enemyImage3.source = 'images/enemy/pN.PNG'
-        else if (dir === "northeast")
-            enemyImage3.source = 'images/enemy/pNE.PNG'
-        else if (dir === "northwest")
-            enemyImage3.source = 'images/enemy/pNW.PNG'
-        else if (dir === "south")
-            enemyImage3.source = 'images/enemy/pS.PNG'
-        else if (dir === "southeast")
-            enemyImage3.source = 'images/enemy/pSE.PNG'
-        else if (dir === "southwest")
-            enemyImage3.source = 'images/enemy/pSW.PNG'
-        else if (dir === "east")
-            enemyImage3.source = 'images/enemy/pE.PNG'
-        else if (dir === "west")
-            enemyImage3.source = 'images/enemy/pW.PNG'
+        enemyImage3.running = true
+        image = "images/enemy/"+ dir + ".png"
+        console.debug("changeImage ", image)
     }
     state: "alive"
     states: [
@@ -69,9 +65,12 @@ Item {
         },
         State {
             name: "dead"
+            PropertyChanges { target: enemyImage3; running:false }
+            PropertyChanges { target: enemyImage3; source:'images/enemy/pTackled.PNG' }
+            PropertyChanges { target: enemyImage3; frame:0 }
+            PropertyChanges { target: enemyImage3; frameCount:1 }
             StateChangeScript { script: particles.burst(4); }
             PropertyChanges { target: e3; shooting:false }
-            PropertyChanges { target: enemyImage3; source:'images/enemy/pTackled.PNG' }
         }
     ]
 

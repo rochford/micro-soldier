@@ -51,14 +51,17 @@ Rectangle {
         State {
             name: "START"
             PropertyChanges { target: startButton; visible: true}
+            PropertyChanges { target: endButton; visible: true}
         },
         State {
             name: "PLAYING"
             PropertyChanges { target: startButton; visible: false}
+            PropertyChanges { target: endButton; visible: true}
         },
         State {
             name: "END"
             PropertyChanges { target: startButton; visible: true}
+            PropertyChanges { target: endButton; visible: false}
         }
     ]
     property int shootRange: 140

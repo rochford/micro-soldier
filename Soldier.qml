@@ -20,7 +20,6 @@ import Qt.labs.particles 1.0
 Item {
     id: soldier;
     visible: false
-    property string _dir: "east"
     property string name: ""
     property string image: "images/red/pE.PNG"
     property int rank: 1
@@ -28,7 +27,7 @@ Item {
         id: nameText
         text: name
         font.pointSize: 12
-        anchors.bottom: solderImage.top
+        anchors.bottom: soldierImage.top
     }
 
     Image {
@@ -36,13 +35,14 @@ Item {
         source:"images/ranks/" + rank + ".png"
         sourceSize.height: 20
         sourceSize.width: 20
-        anchors.top: solderImage.bottom
+        anchors.top: soldierImage.bottom
     }
-    Image {
-        id:solderImage
-        source:image
-        sourceSize.height: 24
-        sourceSize.width: 24
+    Sprite {
+        id:soldierImage
+        width: 30;height: 30
+        source: image
+        running: false
+        frameCount: 3
     }
     x: 30;
     y: 30;
@@ -51,23 +51,8 @@ Item {
     property bool shooting: false
     property bool dead: false
     function changeImage(dir) {
-        if (dir === "north" && _dir === dir)
-            image = 'images/red/pN.PNG'
-        if (dir === "north" && _dir != dir)
-            image = 'images/red/pN2.PNG'
-        else if (dir === "south" && _dir === dir )
-            image = 'images/red/pS.PNG'
-        else if (dir === "south" && _dir != dir )
-            image = 'images/red/pS2.PNG'
-        else if (dir === "east" && _dir === dir)
-            image = 'images/red/pE.PNG'
-        else if (dir === "east" && _dir != dir)
-            image = 'images/red/pE2.PNG'
-        else if (dir === "west" && _dir === dir)
-            image = 'images/red/pW.PNG'
-        else if (dir === "west" && _dir != dir)
-            image = 'images/red/pW2.PNG'
-        _dir = dir
+        soldierImage.running = true
+        image = "images/red/"+ dir + ".png"
     }
     state: "alive"
     states: [
@@ -79,6 +64,10 @@ Item {
         },
         State {
             name: "dead"
+            PropertyChanges { target: soldierImage; running:false }
+            PropertyChanges { target: soldierImage; source:'images/red/pTackled.PNG' }
+            PropertyChanges { target: soldierImage; frame:0 }
+            PropertyChanges { target: soldierImage; frameCount:1 }
             PropertyChanges { target: soldier; shooting:false }
             PropertyChanges { target: nameText; visible:false }
             PropertyChanges { target: soldier; image:'images/red/pTackled.PNG' }
@@ -91,7 +80,31 @@ Item {
     function moveSoldier() {
         if (state === "dead")
             return
-        if ((soldier.destX - soldier.x) > 0) {
+        if ((soldier.destX - soldier.x) < 0 &&
+                 (soldier.destY - soldier.y) > 0) {
+            soldier.x -= 1;
+            soldier.y += 1
+            soldier.changeImage("northwest")
+        }
+        else if ((soldier.destX - soldier.x) < 0 &&
+                 (soldier.destY - soldier.y) < 0) {
+            soldier.x -= 1;
+            soldier.y -= 1
+            soldier.changeImage("southwest")
+        }
+        else if ((soldier.destX - soldier.x) > 0 &&
+                 (soldier.destY - soldier.y) > 0) {
+            soldier.x += 1;
+            soldier.y += 1
+            soldier.changeImage("northeast")
+        }
+        else if ((soldier.destX - soldier.x) < 0 &&
+                 (soldier.destY - soldier.y) > 0) {
+            soldier.x -= 1;
+            soldier.y += 1
+            soldier.changeImage("northwest")
+        }
+        else if ((soldier.destX - soldier.x) > 0) {
             soldier.x += 1;
             soldier.changeImage("east")
         }
