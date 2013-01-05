@@ -27,7 +27,6 @@ Rectangle {
     id:gameScene
     width: 400
     height: 400
-    state: "START"
 
     Image {
         id: land
@@ -47,6 +46,7 @@ Rectangle {
         }
     }
 
+    state: "START"
     states: [
         State {
             name: "START"
@@ -175,6 +175,9 @@ Rectangle {
                         mine_repeater.itemAt(j).state = "exploded"
                         mine_repeater.itemAt(j).exploded( mine_repeater.itemAt(j).x,  mine_repeater.itemAt(j).y)
                         soldiers.itemAt(focusedSolider).state = "dead"
+                        missionSoldierModel.get(indx).alive = false
+                        // select the next select alive soldier
+                        GameState.focusNextAliveSoldier()
                     }
                 }
             }
@@ -190,6 +193,11 @@ Rectangle {
             }
 
             for (var j=0; j<n2.count; j++) {
+                // if enemy is dead then continue
+                if (n2.itemAt(j).state === "dead") {
+                    continue
+                }
+
                 n2.itemAt(j).moveEvil();
                 var indx = -1
                 // are they able to shoot the soldier?
@@ -221,8 +229,9 @@ Rectangle {
                             // dead
                             soldiers.itemAt(indx).state = "dead"
                             missionSoldierModel.get(indx).alive = false
+                            // select the next select alive soldier
+                            GameState.focusNextAliveSoldier()
                         }
-
                     }
                 }
             }

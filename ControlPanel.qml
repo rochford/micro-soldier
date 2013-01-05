@@ -40,7 +40,7 @@ Rectangle {
                         if (missionSoldierModel.get(index).state != "dead") {
                             //foo.source = soldiers.itemAt(index).solderImage.source
                             soldierName.text = missionSoldierModel.get(index).name
-                            console.debug("", missionSoldierModel.get(index).name)
+                            console.debug(missionSoldierModel.get(index).name)
                             moveDestination.visible = false
                             focusedSolider = index
                             console.debug("focusedSoldier = ", index);

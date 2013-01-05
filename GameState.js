@@ -89,7 +89,6 @@ function gameInitialize()
         civilian_repeater.itemAt(i).state = "alive"
     }
     var soldierCount = 0
-    // TODO: soldiers for each mission should be config item
     for (var i=0; (i<soldierModel.count) && (soldierCount < mainWindow.soldierCount); i++) {
         console.debug('gameInitialize soldier', soldiers.itemAt(soldierCount).name)
         if (soldierModel.get(i).alive === true) {
@@ -183,4 +182,19 @@ function initializeSoldierModel() {
         console.debug("created soldier ",soldierModel.get(i).name)
     }
     mainWindow.applicationInitialized = true
+}
+
+function focusNextAliveSoldier() {
+    for (var i=0; i<soldiers.count; i++) {
+        if (soldiers.itemAt(i).state !== "dead") {
+            focusedSolider = i;
+            moveDestination.visible = false
+            moveDestination.x = soldiers.itemAt(i).x
+            moveDestination.y = soldiers.itemAt(i).y
+            soldiers.itemAt(i).shooting = false
+            soldiers.itemAt(i).destX = soldiers.itemAt(i).x
+            soldiers.itemAt(i).destY = soldiers.itemAt(i).y
+            break
+        }
+    }
 }

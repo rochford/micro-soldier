@@ -24,6 +24,7 @@ Rectangle {
     property int mineCount: 0
     property int enemyCount: 0
     property int soldierCount: 0
+    property bool locked: true
 
     width: 100
     height: 100
@@ -31,16 +32,18 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            mainWindow.state = newState
-            mainWindow.mineCount = mineCount
-            mainWindow.enemyCount = enemyCount
-            mainWindow.soldierCount = soldierCount
-            menuUiVisibile(false)
-            console.debug(activeFocus)
+            if (!locked) {
+                mainWindow.state = newState
+                mainWindow.mineCount = mineCount
+                mainWindow.enemyCount = enemyCount
+                mainWindow.soldierCount = soldierCount
+                menuUiVisibile(false)
+                console.debug(activeFocus)
+            }
         }
     }
     Image {
-        id: image1
+        id: missionImageBackground
         anchors.top: parent.top
         anchors.topMargin: 2
         anchors.horizontalCenterOffset: 0
@@ -49,6 +52,17 @@ Rectangle {
         sourceSize.width: 40
         source: "images/land.png"
 
+    }
+    Image {
+        id: missionImageLocked
+        anchors.top: parent.top
+        anchors.topMargin: 2
+        anchors.horizontalCenterOffset: 0
+        anchors.horizontalCenter: parent.horizontalCenter
+        sourceSize.height: 32
+        sourceSize.width: 32
+        source: "images/locked.png"
+        visible: locked ? true: false
     }
 
     Text {
@@ -60,7 +74,7 @@ Rectangle {
         width: missionItemRect - 5
         styleColor: "#f3ecec"
         horizontalAlignment: Text.AlignHCenter
-        anchors.top: image1.bottom
+        anchors.top: missionImageBackground.bottom
         anchors.topMargin: 0
         anchors.horizontalCenter: parent.horizontalCenter
     }

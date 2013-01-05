@@ -67,7 +67,7 @@ Item {
     function moveEvil(e) {
         var indx= -1
 //        console.debug("MoveEvil " + e.x +","+ e.y)
-        if (e3.state != "alive")
+        if (e3.state == "dead")
             return;
         var distX = 1000;
         var distY = 1000;

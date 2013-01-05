@@ -125,27 +125,31 @@ Rectangle {
         anchors.top: menuText.bottom
         MenuMissionItem {
             missionName: "Into Hell"
-            mineCount: 3
-            enemyCount: 2
+            mineCount: 1
+            enemyCount: 1
             soldierCount: 1
+            locked: false
         }
         MenuMissionItem {
             missionName: "Against All Odds"
             mineCount: 5
             enemyCount: 4
             soldierCount: 2
+            locked: false
         }
         MenuMissionItem {
             missionName: "Minefield Attack"
             mineCount: 54
             enemyCount: 2
             soldierCount: 3
+            locked: false
         }
         MenuMissionItem {
             missionName: "Final Push"
             mineCount: 30
             enemyCount: 3
             soldierCount: 2
+            locked: true
         }
     }
 

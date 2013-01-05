@@ -23,6 +23,8 @@ Item {
     property string name: ""
     property string image: "images/red/pE.PNG"
     property int rank: 1
+    // KIA - killed in action, MIA - Missing in Action
+    property string status: "K.I.A."
     Text {
         id: nameText
         text: name

@@ -26,7 +26,7 @@ Rectangle {
         id:textScrollTimer2
         interval: 50; running: true; repeat: true
         onTriggered: {
-            endMissionListView.y -= 2
+            endMissionListView.y -= 3
             if (endMissionListView.y < rollOfHonourText.height) {
                 textScrollTimer2.stop()
                 mainWindow.state="menu"
