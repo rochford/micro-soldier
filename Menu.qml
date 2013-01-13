@@ -20,6 +20,7 @@ import "GameState.js" as GameState
 Rectangle {
     id: mainWindow
     property bool applicationInitialized: false
+    property bool missionModelInitialized: false
     width: 400
     height: 400
     color: "#181616"
@@ -32,6 +33,9 @@ Rectangle {
         "MicroSoldier\n\nCopyright 2013\n\nby Tim Rochford\n\n";
     property variant names: [ 'Adam', 'Bob', 'Charlie', 'David', 'Eddy', 'Frank', 'George', 'Harry',
         'Ian', 'Jerry', 'Ken', 'Lee', 'Mike', 'Nick', 'Owen', 'Peter', 'Qi', 'Rob', 'Steve', 'Tom', 'Uwe', 'Vic', 'Wally', 'Xi', 'Yeon', 'Zack' ]
+    ListModel {
+        id: missionModel
+    }
     ListModel {
         id: soldierModel
     }
@@ -47,22 +51,22 @@ Rectangle {
     }
 
     onStateChanged: {
+        console.debug("onStateChanged")
         if (state==="play" ) {
             if ( ! mainWindow.applicationInitialized) {
                 // setup the soldierModel
                 GameState.initializeSoldierModel()
             }
         }
+        else if (state=="menu") {
+            GameState.menuInitialize()
+        }
     }
 
+    state: "menu"
     states: [
         State {
             name: "menu"
-            PropertyChanges {
-                target: loader
-                source: "Menu.qml"
-            }
-
             PropertyChanges {
                 target: soldiersLeftText
                 text: "Soldiers Left:" + GameState.soldierModelAlive()
@@ -118,38 +122,30 @@ Rectangle {
         font.pixelSize: 20
     }
 
-    Flow {
-        id: missionList
+    Rectangle {
+        id: missonBox
+        color: "green"
         width: 400
+        height: 100
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: menuText.bottom
+
+    Component {
+        id: missionDelegate
         MenuMissionItem {
-            missionName: "Into Hell"
-            mineCount: 1
-            enemyCount: 1
-            soldierCount: 1
-            locked: false
+            missionName: missionModel.get(index).name
+            mineCount: missionModel.get(index).mineCount
+            enemyCount: missionModel.get(index).enemyCount
+            soldierCount: missionModel.get(index).soldierCount
+            locked: missionModel.get(index).locked
         }
-        MenuMissionItem {
-            missionName: "Against All Odds"
-            mineCount: 5
-            enemyCount: 4
-            soldierCount: 2
-            locked: false
         }
-        MenuMissionItem {
-            missionName: "Minefield Attack"
-            mineCount: 54
-            enemyCount: 2
-            soldierCount: 3
-            locked: false
-        }
-        MenuMissionItem {
-            missionName: "Final Push"
-            mineCount: 30
-            enemyCount: 3
-            soldierCount: 2
-            locked: true
+        ListView {
+            id: missionList
+            anchors.fill: parent
+            model: missionModel
+            delegate: missionDelegate
+            orientation: ListView.Horizontal
         }
     }
 
@@ -261,5 +257,6 @@ Rectangle {
         titleText.visible = visible
         soldiersLeftText.visible = visible
         resetButton.visible = visible
+        missonBox.visible = visible
     }
 }

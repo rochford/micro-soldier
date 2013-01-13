@@ -59,6 +59,41 @@ function shoot(x, y) {
     }
 }
 
+function menuInitialize()
+{
+    if (mainWindow.missionModelInitialized)
+        return
+
+    missionModel.clear()
+    missionModel.append({"name":'One',
+                            "soldierCount": 1,
+                            "enemyCount": 1,
+                            "mineCount": 4,
+                         "locked":false})
+    missionModel.append({"name":'Road To Hell',
+                            "soldierCount": 1,
+                            "enemyCount": 1,
+                            "mineCount": 4,
+                         "locked":true})
+    missionModel.append({"name":'Three',
+                            "soldierCount": 1,
+                            "enemyCount": 1,
+                            "mineCount": 4,
+                         "locked":true})
+    missionModel.append({"name":'Road To Hell',
+                            "soldierCount": 1,
+                            "enemyCount": 1,
+                            "mineCount": 4,
+                         "locked":true})
+    missionModel.append({"name":'Three',
+                            "soldierCount": 1,
+                            "enemyCount": 1,
+                            "mineCount": 4,
+                         "locked":true})
+    console.debug("menuInitialize ", missionModel.count)
+    mainWindow.missionModelInitialized = true
+}
+
 function gameInitialize()
 {
     // copy the value to the soldierModel
